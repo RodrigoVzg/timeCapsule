@@ -3,7 +3,7 @@ package dev.capsule.timeCapsule.service;
 
 import java.time.LocalDate;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -15,20 +15,23 @@ import dev.capsule.timeCapsule.repository.CapsuleRepository;
 public class CapsuleService {
 
     private final CapsuleRepository capsuleRepository;
-
-    @Autowired
-    private JavaMailSender javaMailSender;
+    private final JavaMailSender javaMailSender;
+    
+    public CapsuleService(CapsuleRepository capsuleRepository, JavaMailSender javaMailSender) {
+        this.capsuleRepository = capsuleRepository;
+        this.javaMailSender = javaMailSender;
+    }
 
     @Value("${spring.mail.username}")
     private String sender;
-    
-    public CapsuleService(CapsuleRepository capsuleRepository) {
-        this.capsuleRepository = capsuleRepository;
-    }
 
-    public Capsule save(Capsule capsule) {return capsuleRepository.save(capsule);}
+    public Capsule save(Capsule capsule) {
+        return capsuleRepository.save(capsule);
+    }
     
-    public List<Capsule> getAllByDate(LocalDate date) {return capsuleRepository.findByDate(date);}
+    public List<Capsule> getAllByDate(LocalDate date) {
+        return capsuleRepository.findByDate(date);
+    }
 
     public String sendMail(Capsule capsule){
         try {
